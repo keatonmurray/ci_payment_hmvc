@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	</head>
 	<body>
 
-		Hello
+		This is the default index page
 
 	</body>
 </html>
