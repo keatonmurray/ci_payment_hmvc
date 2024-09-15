@@ -1,0 +1,11 @@
+* {
+  font-family: "Playfair Display", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+.custom-button {
+    background-color: #000 !important;
+    padding: 10px 24px;
+    border: 0 !important;
+}
