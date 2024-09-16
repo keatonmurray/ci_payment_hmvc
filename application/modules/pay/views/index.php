@@ -4,7 +4,7 @@
     <h4 id="form-title" class="text-center mb-4">Pay Now</h4>
     <div class="d-flex justify-content-center">
         <div class="w-100">
-            <form action="<?php echo base_url('index.php/pay/init_payment'); ?>" method="POST">
+            <form action="<?php echo base_url('index.php/pay/payment'); ?>" method="POST">
                 <div class="form-floating mb-3">
                     <input type="text" name="first_name" class="form-control" id="first-name" placeholder="John">
                     <label for="first-name">First Name</label>
