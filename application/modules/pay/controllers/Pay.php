@@ -7,7 +7,7 @@ class Pay extends MX_Controller {
     {
         parent::__construct();
         $this->load->helper('url');
-       
+        $this->load->library('form_validation');
     }
 
     public function index()
@@ -17,12 +17,59 @@ class Pay extends MX_Controller {
         $this->load->view('index', $data);
     }
 
-    public function payment()
+    public function store()
     {
-        $amount = '10.00'; // Example amount
-        $return_url = base_url('index.php/paypal/success'); // URL to redirect after payment
-        $cancel_url = base_url('index.php/paypal/cancel');   // URL to redirect if payment is canceled
-        
-        echo Modules::run('paypal/init_payment', $amount, $return_url, $cancel_url);
+        $validate = [
+            [
+                'field' => 'first_name',
+                'label' => 'first name',
+                'rules' => 'required'
+            ],
+            [
+                'field' => 'last_name',
+                'label' => 'last name',
+                'rules' => 'required'
+            ],
+            [
+                'field' => 'street_name',
+                'label' => 'street name',
+                'rules' => 'required'
+            ],
+            [
+                'field' => 'city',
+                'label' => 'city',
+                'rules' => 'required'
+            ],
+            [
+                'field' => 'state',
+                'label' => 'state',
+                'rules' => 'required'
+            ],
+            [
+                'field' => 'zip_code',
+                'label' => 'zip code',
+                'rules' => 'required'
+            ],
+            [
+                'field' => 'country',
+                'label' => 'country',
+                'rules' => 'required'
+            ]
+        ];
+
+        $this->form_validation->set_rules($validate);
+
+        if ($this->form_validation->run() === FALSE) {
+            $errors = validation_errors();
+            echo "Failed: " . $errors;
+        } else {
+            return $this->make_payment();
+        }
+    }
+
+    private function make_payment()
+    {
+        $amount = $this->input->post('amount');
+        echo Modules::run('paypal/init_payment', $amount);
     }
 }

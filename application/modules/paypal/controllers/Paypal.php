@@ -63,7 +63,7 @@
             return $stored_token;
         }
 
-        public function init_payment($amount, $return_url, $cancel_url)
+        public function init_payment($amount)
         {
             try {
                 $access_token = $this->get_access_token();
@@ -73,6 +73,9 @@
             }
 
             $url = $this->api_endpoint . '/v1/payments/payment';
+            
+            $return_url = base_url('index.php/paypal/success');
+            $cancel_url = base_url('index.php/paypal/cancel');
             
             $data = array(
                 'intent' => 'sale',
