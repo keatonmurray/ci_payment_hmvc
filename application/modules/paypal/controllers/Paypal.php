@@ -4,133 +4,185 @@
     class Paypal extends MX_Controller {
 
         private $api_endpoint;
-        private $access_token;
+        private $client_id;
+        private $client_secret;
 
         public function __construct()
         {
             parent::__construct();
             $this->load->config('paypal');
+            $this->load->library('session');
+            
             $paypal_config = $this->config->item('paypal');
 
             $this->api_endpoint = $paypal_config['api_endpoint'];
-            $this->access_token = $paypal_config['access_token'];
+            $this->client_id = $paypal_config['client_id'];
+            $this->client_secret = $paypal_config['client_secret'];
+        }
+
+        private function get_access_token()
+        {
+            $stored_token = $this->session->userdata('paypal_access_token');
+            $expires_at = $this->session->userdata('paypal_token_expires_at');
+            
+            if ($stored_token && $expires_at && time() < $expires_at) {
+                return $stored_token; 
+            }
+
+            $url = $this->api_endpoint . '/v1/oauth2/token';
+            $client_id = $this->client_id;
+            $client_secret = $this->client_secret;
+
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Accept: application/json',
+                'Accept-Language: en_US'
+            ));
+            curl_setopt($ch, CURLOPT_USERPWD, $client_id . ":" . $client_secret);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=client_credentials");
+
+            $response = curl_exec($ch);
+            if (curl_errno($ch)) {
+                throw new Exception('Error requesting access token: ' . curl_error($ch));
+            }
+            curl_close($ch);
+
+            $result = json_decode($response, true);
+            
+            if (isset($result['access_token'])) {
+                $this->session->set_userdata('paypal_access_token', $result['access_token']);
+                $this->session->set_userdata('paypal_token_expires_at', time() + $result['expires_in'] - 60); // Subtract 60 seconds as a buffer
+
+                return $result['access_token'];
+
+            } else {
+                throw new Exception('Failed to retrieve access token.');
+            }
+
+            return $stored_token;
         }
 
         public function init_payment($amount, $return_url, $cancel_url)
-    {
+        {
+            try {
+                $access_token = $this->get_access_token();
+            } catch (Exception $e) {
+                echo 'Failed to get access token: ' . $e->getMessage();
+                return;
+            }
 
-        try {
-            $access_token = $this->access_token;
-        } catch (Exception $e) {
-            echo 'Failed to get access token: ' . $e->getMessage();
-            return;
-        }
-
-        $url = $this->api_endpoint . '/v1/payments/payment';
-        $data = array(
-            'intent' => 'sale',
-            'payer' => array(
-                'payment_method' => 'paypal'
-            ),
-            'redirect_urls' => array(
-                'return_url' => $return_url,
-                'cancel_url' => $cancel_url
-            ),
-            'transactions' => array(
-                array(
-                    'amount' => array(
-                        'total' => $amount,
-                        'currency' => 'USD'
-                    ),
-                    'description' => 'Payment description'
+            $url = $this->api_endpoint . '/v1/payments/payment';
+            
+            $data = array(
+                'intent' => 'sale',
+                'payer' => array(
+                    'payment_method' => 'paypal'
+                ),
+                'redirect_urls' => array(
+                    'return_url' => $return_url,
+                    'cancel_url' => $cancel_url
+                ),
+                'transactions' => array(
+                    array(
+                        'amount' => array(
+                            'total' => $amount,
+                            'currency' => 'USD'
+                        ),
+                        'description' => 'Payment description'
+                    )
                 )
-            )
-        );
+            );
 
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json',
-            'Authorization: Bearer ' . $access_token
-        ));
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $access_token
+            ));
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
-        $response = curl_exec($ch);
-        if (curl_errno($ch)) {
-            throw new Exception(curl_error($ch));
-        }
-        curl_close($ch);
+            $response = curl_exec($ch);
+            if (curl_errno($ch)) {
+                throw new Exception(curl_error($ch));
+            }
+            curl_close($ch);
 
-        $response = json_decode($response, true);
+            $response = json_decode($response, true);
 
-        if (isset($response['links']) && is_array($response['links'])) {
-            $approvalUrl = '';
-            foreach ($response['links'] as $link) {
-                if (isset($link['rel']) && $link['rel'] == 'approval_url') {
-                    $approvalUrl = $link['href'];
-                    break;
+            if (isset($response['links']) && is_array($response['links'])) {
+                $approvalUrl = '';
+                foreach ($response['links'] as $link) {
+                    if (isset($link['rel']) && $link['rel'] == 'approval_url') {
+                        $approvalUrl = $link['href'];
+                        break;
+                    }
                 }
-            }
 
-            if ($approvalUrl) {
-                redirect($approvalUrl);
+                if ($approvalUrl) {
+                    redirect($approvalUrl);
+                } else {
+                    echo "Error creating payment: Approval URL not found.";
+                }
             } else {
-                echo "Error creating payment: Approval URL not found.";
+                echo "Error creating payment: Invalid response from PayPal.";
             }
-        } else {
-            echo "Error creating payment: Invalid response from PayPal.";
         }
-    }
 
-    public function success()
-    {
-        $payment_id = $this->input->get('paymentId');
-        $payer_id = $this->input->get('PayerID');
+        public function success()
+        {
+            $payment_id = $this->input->get('paymentId');
+            $payer_id = $this->input->get('PayerID');
 
-        if ($payment_id && $payer_id) {
-            $result = $this->execute_payment($payment_id, $payer_id);
+            if ($payment_id && $payer_id) {
+                $result = $this->execute_payment($payment_id, $payer_id);
 
-            if (isset($result['state']) && $result['state'] === 'approved') {
-                echo "Payment successful!";
+                if (isset($result['state']) && $result['state'] === 'approved') {
+                    echo "Payment successful!";
+                } else {
+                    echo "Payment failed: " . print_r($result, true);
+                }
             } else {
-                echo "Payment failed: " . print_r($result, true);
+                echo "Payment failed: Invalid payment or payer ID.";
             }
-        } else {
-            echo "Payment failed: Invalid payment or payer ID.";
         }
-    }
 
-    public function cancel()
-    {
-        echo "Payment canceled!";
-    }
-
-    private function execute_payment($payment_id, $payer_id) {
-        $access_token = $this->access_token;
-        $url = $this->api_endpoint . '/v1/payments/payment/' . $payment_id . '/execute';
-
-        $data = array(
-            'payer_id' => $payer_id
-        );
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json',
-            'Authorization: Bearer ' . $access_token
-        ));
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-
-        $response = curl_exec($ch);
-        if (curl_errno($ch)) {
-            throw new Exception(curl_error($ch));
+        public function cancel()
+        {
+            echo "Payment canceled!";
         }
-        curl_close($ch);
 
-        $response = json_decode($response, true);
-        return $response;
+        private function execute_payment($payment_id, $payer_id) {
+            $access_token = $this->get_access_token();
+            $url = $this->api_endpoint . '/v1/payments/payment/' . $payment_id . '/execute';
+        
+        
+            $data = array(
+                'payer_id' => $payer_id
+            );
+        
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $access_token
+            ));
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        
+            $response = curl_exec($ch);
+        
+            // Log CURL errors
+            if (curl_errno($ch)) {
+                error_log('CURL Error: ' . curl_error($ch));
+                throw new Exception(curl_error($ch));
+            }
+        
+            curl_close($ch);
+        
+            $response = json_decode($response, true);
+            return $response;
+        }
+        
     }
-
-}

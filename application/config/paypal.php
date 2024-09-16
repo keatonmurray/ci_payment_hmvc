@@ -6,5 +6,5 @@ $config['paypal'] = array(
     'client_secret' => 'EDajS-IF1hgKn80KQUjXC-GoPXldIJkfOUpZWTEHQvJy22K7v4WjpW_v-Mcb-TbQGAddm0vxKEpv3QL2',
     'sandbox' => true,
     'api_endpoint' => 'https://api-m.sandbox.paypal.com', // Change to 'https://api-m.paypal.com' for live
-    'access_token' => 'A21AAIX6slzgxTJjnHDnRD5C14LlV26hRgtqMbcsq5iYs5XsDCQHs-Z4FZ8OM3TpJOjQdyUkPjSFD27DnuNSHHeFtF6aeCHkQ'
+    // 'access_token' => 'A21AAIX6slzgxTJjnHDnRD5C14LlV26hRgtqMbcsq5iYs5XsDCQHs-Z4FZ8OM3TpJOjQdyUkPjSFD27DnuNSHHeFtF6aeCHkQ'
 );

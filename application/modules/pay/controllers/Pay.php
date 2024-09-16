@@ -20,8 +20,8 @@ class Pay extends MX_Controller {
     public function payment()
     {
         $amount = '10.00'; // Example amount
-        $return_url = base_url('pay/success'); // URL to redirect after payment
-        $cancel_url = base_url('pay/cancel');   // URL to redirect if payment is canceled
+        $return_url = base_url('index.php/paypal/success'); // URL to redirect after payment
+        $cancel_url = base_url('index.php/paypal/cancel');   // URL to redirect if payment is canceled
         
         echo Modules::run('paypal/init_payment', $amount, $return_url, $cancel_url);
     }
