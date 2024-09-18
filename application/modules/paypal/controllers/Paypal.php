@@ -60,10 +60,9 @@
                 throw new Exception('Failed to retrieve access token.');
             }
 
-            return $stored_token;
         }
 
-        public function init_payment($amount)
+        public function init_payment($amount, $success)
         {
             try {
                 $access_token = $this->get_access_token();
@@ -73,7 +72,6 @@
             }
 
             $url = $this->api_endpoint . '/v1/payments/payment';
-            
             $return_url = base_url('index.php/paypal/success');
             $cancel_url = base_url('index.php/paypal/cancel');
             
@@ -142,12 +140,15 @@
                 $result = $this->execute_payment($payment_id, $payer_id);
 
                 if (isset($result['state']) && $result['state'] === 'approved') {
-                    echo "Payment successful!";
+                    return true;
+                    //pass in a method here that sends an email confirmation to user
                 } else {
-                    echo "Payment failed: " . print_r($result, true);
+                    // echo "Payment failed: " . print_r($result, true);
+                    return false;
                 }
             } else {
-                echo "Payment failed: Invalid payment or payer ID.";
+                // echo "Payment failed: Invalid payment or payer ID.";
+                return false;
             }
         }
 
@@ -176,7 +177,6 @@
         
             $response = curl_exec($ch);
         
-            // Log CURL errors
             if (curl_errno($ch)) {
                 error_log('CURL Error: ' . curl_error($ch));
                 throw new Exception(curl_error($ch));

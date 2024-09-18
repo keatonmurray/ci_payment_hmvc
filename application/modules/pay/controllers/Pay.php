@@ -8,6 +8,7 @@ class Pay extends MX_Controller {
         parent::__construct();
         $this->load->helper('url');
         $this->load->library('form_validation');
+        $this->load->model('Pay_model');
     }
 
     public function index()
@@ -19,7 +20,7 @@ class Pay extends MX_Controller {
 
     public function store()
     {
-        $validate = [
+        $validateForm = [
             [
                 'field' => 'first_name',
                 'label' => 'first name',
@@ -57,19 +58,37 @@ class Pay extends MX_Controller {
             ]
         ];
 
-        $this->form_validation->set_rules($validate);
+        $this->form_validation->set_rules($validateForm);
 
         if ($this->form_validation->run() === FALSE) {
             $errors = validation_errors();
             echo "Failed: " . $errors;
         } else {
-            return $this->make_payment();
+
+            $this->make_payment();
+
         }
+    }
+
+    private function insert_form_data()
+    {
+        $data = array(
+            'first_name' => $this->input->post('first_name'),
+            'last_name' => $this->input->post('last_name'),
+            'street_name' => $this->input->post('street_name'),
+            'city' => $this->input->post('city'),
+            'state' => $this->input->post('state'),
+            'zip_code' => $this->input->post('zip_code'),
+            'country' => $this->input->post('country')
+        );
+
+        $this->Pay_model->insert($data);
     }
 
     private function make_payment()
     {
+        $success = $this->insert_form_data();
         $amount = $this->input->post('amount');
-        echo Modules::run('paypal/init_payment', $amount);
+        echo Modules::run('paypal/init_payment', $amount, $success);
     }
 }
