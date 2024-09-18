@@ -9,6 +9,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/5dfbc71075.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="<?php echo base_url('assets/css/global.css'); ?>">
     </head>
     <body class="container" style="padding: 50px;">

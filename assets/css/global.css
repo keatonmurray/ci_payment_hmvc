@@ -4,8 +4,33 @@
   font-style: normal;
 }
 
-.custom-button {
+.custom-button[type="button"] {
     background-color: #000 !important;
     padding: 10px 24px;
-    border: 0 !important;
+    border: 0;
+    color: #fff;
+}
+
+.custom-button[type="button"]:hover {
+  background-color: #333333 !important;
+}
+
+.custom-button[type="submit"] {
+  background-color: #CB9300;
+  padding: 10px 24px;
+  border: 0;
+  color: #fff;
+}
+
+.custom-button[type="submit"]:hover {
+  background-color: #E0A800;
+}
+
+#product-description {
+  font-size: 14px !important;
+}
+
+img {
+  height: 76px;
+  width: 76px;
 }
