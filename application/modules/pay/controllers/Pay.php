@@ -62,12 +62,27 @@ class Pay extends MX_Controller {
 
         if ($this->form_validation->run() === FALSE) {
             $errors = validation_errors();
-            echo "Failed: " . $errors;
+            
+            $response = [
+                'status' => 'error',
+                'errors' => [
+                    'form' => $errors
+                ],
+                'message' => $errors 
+            ];
+
         } else {
 
             $this->make_payment();
 
+            $response = [
+                'status' => 'success',
+                'message' => 'Your order has been placed!'
+            ];
         }
+
+        $this->output->set_content_type('application/json')->set_output(json_encode($response));
+
     }
 
     private function insert_form_data()

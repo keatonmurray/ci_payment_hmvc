@@ -3,7 +3,7 @@
 <div id="payment-form" class="">
     <div class="d-flex justify-content-center">
         <div class="w-100">
-            <form action="<?php echo base_url('index.php/pay/store'); ?>" method="POST">
+            <form id="form-submit" action="<?php echo base_url('index.php/pay/store'); ?>" method="POST">
                 <div class="row py-4">
                     <div class="col-12 col-md-6">
                         <div class="shadow-lg p-4 border-rounded">
