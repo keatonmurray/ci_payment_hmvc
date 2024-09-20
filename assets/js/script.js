@@ -5,8 +5,8 @@ $(document).ready(function() {
         var data = new FormData($(this)[0]);
 
         $.ajax({
-            url: "<?php echo base_url('pay/store'); ?>",
-            type: 'POST', 
+            url: this.action,
+            type: this.method, 
             data: data,
             processData: false, 
             contentType: false, 
@@ -17,7 +17,11 @@ $(document).ready(function() {
                     if (response.status === 'success') {
                         console.log("Success!");
                     } else if (response.status === 'error') {
-                        console.log("Failed!");
+                        Swal.fire({
+                            title: "Oops!",
+                            text: response.message,
+                            icon: "error"
+                          });
                     }
                 } else {
                     console.log('Unexpected response format:', response);

@@ -13,5 +13,6 @@
         <script src="https://kit.fontawesome.com/5dfbc71075.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="<?php echo base_url('assets/css/global.css'); ?>">
         <script src="<?php echo base_url('assets/js/script.js'); ?>" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body class="container d-flex justify-content-center align-items-center">

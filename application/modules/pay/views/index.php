@@ -3,7 +3,7 @@
 <div id="payment-form">
     <div class="d-flex justify-content-center">
         <div class="w-100">
-            <form id="form-submit" action="<?php echo base_url('index.php/pay/store'); ?>" method="POST">
+            <form id="form-submit" action="<?php echo base_url('pay/store'); ?>" method="POST">
                 <div class="row py-4">
                     <div class="col-12 col-md-6">
                         <div class="shadow-lg p-4 border-rounded">
@@ -27,12 +27,7 @@
                                     <label for="city">City</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <select class="form-select" id="state" name="state" aria-label="State" style="width: 80px;">
-                                        <option selected disabled>Select a state</option>
-                                        <?php foreach($countries as $country_code => $country): ?>
-                                            <option value=""><?php echo $country->get_name(); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                    <input type="text" name="state" class="form-control" id="state" placeholder="State" style="width: 80px;">
                                     <label for="state">State</label>
                                 </div>
                                 <div class="form-floating mb-3">
