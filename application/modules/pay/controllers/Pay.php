@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+use Rinvex\Country\CountryLoader;
 
 class Pay extends MX_Controller {
 

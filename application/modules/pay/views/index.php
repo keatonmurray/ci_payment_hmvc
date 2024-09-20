@@ -8,7 +8,7 @@
                     <div class="col-12 col-md-6">
                         <div class="shadow-lg p-4 border-rounded">
                             <h4 id="form-title" class="text-start mb-4">Personal Information</h4>
-                            <input type="hidden" name="amount" value="148" readonly>
+                            <input type="hidden" name="amount" value="98" readonly>
                             <div class="form-floating mb-3">
                                 <input type="text" name="first_name" class="form-control" id="first-name" placeholder="John">
                                 <label for="first-name">First Name</label>
@@ -27,7 +27,12 @@
                                     <label for="city">City</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="text" name="state" class="form-control" id="state" placeholder="State" style="width: 80px;">
+                                    <select class="form-select" id="state" name="state" aria-label="State" style="width: 80px;">
+                                        <option selected disabled>Select a state</option>
+                                        <?php foreach($countries as $country_code => $country): ?>
+                                            <option value=""><?php echo $country->get_name(); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
                                     <label for="state">State</label>
                                 </div>
                                 <div class="form-floating mb-3">
