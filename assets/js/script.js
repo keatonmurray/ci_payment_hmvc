@@ -5,7 +5,7 @@ $(document).ready(function() {
         var data = new FormData($(this)[0]);
 
         $.ajax({
-            url: $(this).attr('action'),
+            url: "<?php echo base_url('pay/store'); ?>",
             type: 'POST', 
             data: data,
             processData: false, 
@@ -15,15 +15,9 @@ $(document).ready(function() {
                 console.log('Success Response:', response); 
                 if (response && response.status) { 
                     if (response.status === 'success') {
-                        alert('Success: ' + (response.message || 'The operation was successful.'));
-
-                        window.location.reload(); 
+                        console.log("Success!");
                     } else if (response.status === 'error') {
-                        $('#error-container').empty(); 
-                        $.each(response.errors || {}, function(field, error) {
-                            $('#error-container').append('<div class="error">' + error + '</div>');
-                        });
-                        window.location.href = window.location.href;
+                        console.log("Failed!");
                     }
                 } else {
                     console.log('Unexpected response format:', response);

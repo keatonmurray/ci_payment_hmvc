@@ -4,6 +4,10 @@
   font-style: normal;
 }
 
+html, body {
+  height: 100%;
+}
+
 .custom-button[type="button"] {
     background-color: #000 !important;
     padding: 10px 24px;

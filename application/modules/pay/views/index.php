@@ -1,6 +1,6 @@
 <?php echo $layout; ?>
 
-<div id="payment-form" class="">
+<div id="payment-form">
     <div class="d-flex justify-content-center">
         <div class="w-100">
             <form id="form-submit" action="<?php echo base_url('index.php/pay/store'); ?>" method="POST">

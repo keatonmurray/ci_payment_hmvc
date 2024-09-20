@@ -71,6 +71,9 @@ class Pay extends MX_Controller {
                 'message' => $errors 
             ];
 
+            $this->output->set_content_type('application/json')->set_output(json_encode($response));
+            return;
+
         } else {
 
             $this->make_payment();
