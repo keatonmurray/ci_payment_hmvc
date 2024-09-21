@@ -12,32 +12,39 @@
                             <div class="form-floating mb-3">
                                 <input type="text" name="first_name" class="form-control" id="first-name" placeholder="John">
                                 <label for="first-name">First Name</label>
+                                <div class="error-message invalid-feedback"></div> 
                             </div>
                             <div class="form-floating mb-3">
                                 <input type="text" name="last_name" class="form-control" id="last-name" placeholder="Doe">
                                 <label for="last-name">Last Name</label>
+                                <div class="error-message invalid-feedback"></div> 
                             </div>
                             <div class="form-floating mb-3">
                                 <input type="text" name="street_name" class="form-control" id="street-name" placeholder="123 Main St">
                                 <label for="street-name">Street Name</label>
+                                <div class="error-message invalid-feedback"></div> 
                             </div>
                             <div class="d-flex gap-3">
                                 <div class="form-floating mb-3 flex-grow-1">
                                     <input type="text" name="city" class="form-control" id="city" placeholder="City">
                                     <label for="city">City</label>
+                                    <div class="error-message invalid-feedback"></div> 
                                 </div>
                                 <div class="form-floating mb-3">
                                     <input type="text" name="state" class="form-control" id="state" placeholder="State" style="width: 80px;">
                                     <label for="state">State</label>
+                                    <div class="error-message invalid-feedback"></div> 
                                 </div>
                                 <div class="form-floating mb-3">
                                     <input type="text" name="zip_code" class="form-control" id="zip-code" placeholder="ZIP Code" style="width: 120px;">
                                     <label for="zip-code">ZIP Code</label>
+                                    <div class="error-message invalid-feedback"></div> 
                                 </div>
                             </div>
                             <div class="form-floating mb-3">
                                 <input type="text" name="country" class="form-control" id="country" placeholder="Country">
                                 <label for="country">Country</label>
+                                <div class="error-message invalid-feedback"></div> 
                             </div>
                         </div>
                     </div>

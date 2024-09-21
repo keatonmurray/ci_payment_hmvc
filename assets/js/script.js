@@ -1,40 +1,60 @@
-$(document).ready(function() {
-    $('#form-submit').on('submit', function(event) {
-        event.preventDefault();
-
-        var data = new FormData($(this)[0]);
-
-        $.ajax({
-            url: this.action,
-            type: this.method, 
-            data: data,
-            processData: false, 
-            contentType: false, 
-            dataType: 'json', 
-            success: function(response) {
-                console.log('Success Response:', response); 
-                if (response && response.status) { 
-                    if (response.status === 'success') {
-                        console.log("Success!");
-                    } else if (response.status === 'error') {
-                        Swal.fire({
-                            title: "Oops!",
-                            text: response.message,
-                            icon: "error"
-                          });
-                    }
-                } else {
-                    console.log('Unexpected response format:', response);
-                    alert('Received an unexpected response.');
-                }
+jQuery(document).ready(function() {
+    jQuery('#form-submit').validate({
+        rules: {
+            first_name: {
+                required: true,
             },
-            error: function(xhr, status, error) {
-                console.log('AJAX request failed:', status, error); 
-                if (xhr.responseText) {
-                    console.log('Response Text:', xhr.responseText);
-                }
-                alert('An error occurred while processing your request.');
+            last_name: {
+                required: true,
+            },
+            street_name: {
+                required: true,
+            },
+            city: {
+                required: true,
+            },
+            state: {
+                required: true,
+            },
+            zip_code: {
+                required: true,
+            },
+            country: {
+                required: true,
             }
-        });
+        },
+        messages: {
+            first_name: {
+                required: "Please enter your first name",
+            },
+            last_name: {
+                required: "Please enter your last name",
+            },
+            street_name: {
+                required: "Please enter a street name",
+            },
+            city: {
+                required: "Please enter city",
+            },
+            state: {
+                required: "Please enter state",
+            },
+            zip_code: {
+                required: "Please enter ZIP Code",
+            },
+            country: {
+                required: "Please enter country"
+            }
+        },
+        errorPlacement: function(error, element) {
+            var errorDiv = element.closest('.form-floating').find('.error-message');
+            error.appendTo(errorDiv); 
+        },
+        highlight: function(element) {
+            jQuery(element).addClass('is-invalid'); 
+        },
+        unhighlight: function(element) {
+            jQuery(element).removeClass('is-invalid'); 
+        }
     });
 });
