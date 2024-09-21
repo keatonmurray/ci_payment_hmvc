@@ -38,3 +38,10 @@ img {
   height: 76px;
   width: 76px;
 }
+
+input:focus, 
+textarea:focus, 
+select:focus {
+    border-color: #cb9300 !important; 
+    box-shadow: 0 0 0 0.2rem rgba(203, 147, 0, 0.5) !important;
+}
