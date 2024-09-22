@@ -140,14 +140,12 @@
                 $result = $this->execute_payment($payment_id, $payer_id);
 
                 if (isset($result['state']) && $result['state'] === 'approved') {
-                    return true;
-                    //pass in a method here that sends an email confirmation to user
-                } else {
-                    // echo "Payment failed: " . print_r($result, true);
-                    return false;
-                }
+                    return redirect('/');
+                } 
+
+                exit();
+
             } else {
-                // echo "Payment failed: Invalid payment or payer ID.";
                 return false;
             }
         }
