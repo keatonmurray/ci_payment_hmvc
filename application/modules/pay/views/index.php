@@ -25,14 +25,18 @@
                                 <div class="error-message invalid-feedback"></div> 
                             </div>
                             <div class="d-flex gap-3">
-                                <div class="form-floating mb-3 flex-grow-1">
-                                    <input type="text" name="city" class="form-control" id="city" placeholder="City">
-                                    <label for="city">City</label>
+                                <div class="form-floating mb-3">
+                                    <select name="state" class="form-control" id="state" aria-label="State" style="width: 80px;">
+                                        <option value="">Select a state</option>
+                                    </select>
+                                    <label for="state">State</label>
                                     <div class="error-message invalid-feedback"></div> 
                                 </div>
-                                <div class="form-floating mb-3">
-                                    <input type="text" name="state" class="form-control" id="state" placeholder="State" style="width: 80px;">
-                                    <label for="state">State</label>
+                                <div class="form-floating mb-3 flex-grow-1">
+                                    <select name="city" class="form-control" id="city" aria-label="City">
+                                        <option value="">Select a city</option>
+                                    </select>
+                                    <label for="city">City</label>
                                     <div class="error-message invalid-feedback"></div> 
                                 </div>
                                 <div class="form-floating mb-3">
@@ -42,7 +46,7 @@
                                 </div>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" name="country" class="form-control" id="country" placeholder="Country">
+                                <input type="text" name="country" class="form-control" id="country" placeholder="United States" value="United States" readonly>
                                 <label for="country">Country</label>
                                 <div class="error-message invalid-feedback"></div> 
                             </div>
@@ -84,7 +88,6 @@
                         </div>
                     </div>
                 </div>
-                
             </form>
         </div>
     </div>

@@ -13,8 +13,10 @@
 
         public function index()
         {
-            $data['layout'] = $this->load->view('head', NULL, TRUE);
+            $title['title'] = "CI Payment";
+            $data['layout'] = $this->load->view('head', $title, NULL, TRUE);
             $data['footer'] = $this->load->view('footer', NULL, TRUE);
+
             $this->load->view('index', $data);
         }
 

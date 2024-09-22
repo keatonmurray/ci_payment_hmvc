@@ -1,5 +1,6 @@
-jQuery(document).ready(function() {
-    jQuery('#form-submit').validate({
+/*************** START OF FORM VALIDATION ***************/
+$(document).ready(function() {
+    $('#form-submit').validate({
         rules: {
             first_name: {
                 required: true,
@@ -18,6 +19,7 @@ jQuery(document).ready(function() {
             },
             zip_code: {
                 required: true,
+                digits: true,
             },
             country: {
                 required: true,
@@ -41,6 +43,7 @@ jQuery(document).ready(function() {
             },
             zip_code: {
                 required: "Please enter ZIP Code",
+                digits: "Only numerical digits are allowed"
             },
             country: {
                 required: "Please enter country"
@@ -58,3 +61,33 @@ jQuery(document).ready(function() {
         }
     });
 });
+
+/*************** END OF FORM VALIDATION ***************/
+
+/*************** START OF GET ALL STATES ****************/
+
+$(document).ready(function() {
+    $.getJSON('assets/js/cities.json', function(data) {
+      $.each(data.states, function(key, state) {
+        $('#state').append('<option value="' + state.name + '">' + state.name + '</option>');
+      });
+  
+      $('#state').on('change', function() {
+        var selectedState = $(this).val();
+        $('#city').html('<option value="">Select City</option>'); // Clear previous cities
+  
+        var stateData = data.states.find(function(state) {
+          return state.name === selectedState;
+        });
+  
+        if (stateData) {
+          $.each(stateData.cities, function(key, city) {
+            $('#city').append('<option value="' + city + '">' + city + '</option>');
+          });
+        }
+      });
+    });
+  });
+
+  /*************** END OF GET ALL STATES ***************/
+  
