@@ -72,8 +72,6 @@
             }
 
             $url = $this->api_endpoint . '/v1/payments/payment';
-            $return_url = base_url('index.php/paypal/success');
-            $cancel_url = base_url('index.php/paypal/cancel');
 
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

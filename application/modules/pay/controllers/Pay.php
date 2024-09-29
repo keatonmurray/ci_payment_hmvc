@@ -86,6 +86,8 @@
         {
             $success = $this->insert_form_data();
             $amount = 100; //sample static amount
+            $return_url = base_url('index.php/paypal/success');
+            $cancel_url = base_url('index.php/paypal/cancel');
 
             $data = array(
                 'intent' => 'sale',
@@ -106,7 +108,7 @@
                     )
                 )
             );
-            
+
             echo Modules::run('paypal/init_payment', $data, $success);
         }
     }
