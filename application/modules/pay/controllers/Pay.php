@@ -85,7 +85,28 @@
         private function make_payment()
         {
             $success = $this->insert_form_data();
-            $amount = $this->input->post('amount');
-            echo Modules::run('paypal/init_payment', $amount, $success);
+            $amount = 100; //sample static amount
+
+            $data = array(
+                'intent' => 'sale',
+                'payer' => array(
+                    'payment_method' => 'paypal'
+                ),
+                'redirect_urls' => array(
+                    'return_url' => $return_url,
+                    'cancel_url' => $cancel_url
+                ),
+                'transactions' => array(
+                    array(
+                        'amount' => array(
+                            'total' => $amount,
+                            'currency' => 'USD'
+                        ),
+                        'description' => 'Payment description'
+                    )
+                )
+            );
+            
+            echo Modules::run('paypal/init_payment', $data, $success);
         }
     }

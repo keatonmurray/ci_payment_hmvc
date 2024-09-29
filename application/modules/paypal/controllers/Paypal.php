@@ -62,7 +62,7 @@
 
         }
 
-        public function init_payment($amount, $success)
+        public function init_payment($data, $success)
         {
             try {
                 $access_token = $this->get_access_token();
@@ -74,26 +74,6 @@
             $url = $this->api_endpoint . '/v1/payments/payment';
             $return_url = base_url('index.php/paypal/success');
             $cancel_url = base_url('index.php/paypal/cancel');
-            
-            $data = array(
-                'intent' => 'sale',
-                'payer' => array(
-                    'payment_method' => 'paypal'
-                ),
-                'redirect_urls' => array(
-                    'return_url' => $return_url,
-                    'cancel_url' => $cancel_url
-                ),
-                'transactions' => array(
-                    array(
-                        'amount' => array(
-                            'total' => $amount,
-                            'currency' => 'USD'
-                        ),
-                        'description' => 'Payment description'
-                    )
-                )
-            );
 
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
